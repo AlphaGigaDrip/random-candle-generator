@@ -1,6 +1,12 @@
 mod utils;
+#[macro_use]
+extern crate serde_derive;
+use std::io::Write;
+use serde::{Serialize, Deserialize};
+use rmp_serde;
+use rmp_serde::Serializer;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Candle {
     pub time_begin: u64,
     pub time_end: u64,
@@ -97,17 +103,51 @@ pub fn generate_one_month_minute_candles() -> Vec<Candle> {
     candles
 }
 
+pub fn serialize_and_save() {
+    // let candles = generate_one_month_minute_candles();
+    // let serialized_candles = serde_json::to_vec(&candles).expect("failed to serialize candles.");
+
+    let candle = Candle{
+        time_begin: 0,
+        time_end: 0,
+        open: 0.0,
+        high: 0.0,
+        low: 0.0,
+        close: 0.0,
+        volume: 0.0
+    };
+    // let j = rmp_serde::to_vec(&candle).expect("failed to serialize");
+    // println!("got j string result: {:?}", j);
+
+
+    let mut buf = Vec::new();
+    candle.serialize(&mut Serializer::new(&mut buf)).unwrap();
+    println!("serialized into buf of len: {:?}", buf.len());
+
+
+    // let serialized = serde_json::to_vec(&candle).expect("failed to serialize");
+    // println!("serialized candles: {:?}", serialized.len());
+
+    // let path = std::path::Path::new("./tmp/candles.bson");
+    // let mut file = std::fs::File::create(path).expect("Failed to create file");
+    // let result= file.write(serialized_candles.as_slice());
+    // println!("got file write result: {:?}", result);
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn it_works() {
-        let candles = generate_one_month_minute_candles();
-        println!("len candles: {:?}", candles.len());
-        for i in 0..2 {
-            println!("{}: {:?}", i, candles[i]);
-        }
+        // let candles = generate_one_month_minute_candles();
+        // println!("len candles: {:?}", candles.len());
+        // for i in 0..2 {
+        //     println!("{}: {:?}", i, candles[i]);
+        // }
+        serialize_and_save();
+        println!("something.... yay?");
 
         // assert_eq!(result, 4);
     }
