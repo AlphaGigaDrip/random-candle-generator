@@ -104,34 +104,15 @@ pub fn generate_one_month_minute_candles() -> Vec<Candle> {
 }
 
 pub fn serialize_and_save() {
-    // let candles = generate_one_month_minute_candles();
-    // let serialized_candles = serde_json::to_vec(&candles).expect("failed to serialize candles.");
-
-    let candle = Candle{
-        time_begin: 0,
-        time_end: 0,
-        open: 0.0,
-        high: 0.0,
-        low: 0.0,
-        close: 0.0,
-        volume: 0.0
-    };
-    // let j = rmp_serde::to_vec(&candle).expect("failed to serialize");
-    // println!("got j string result: {:?}", j);
-
-
+    let candles = generate_one_month_minute_candles();
     let mut buf = Vec::new();
-    candle.serialize(&mut Serializer::new(&mut buf)).unwrap();
+    candles.serialize(&mut Serializer::new(&mut buf)).unwrap();
     println!("serialized into buf of len: {:?}", buf.len());
 
-
-    // let serialized = serde_json::to_vec(&candle).expect("failed to serialize");
-    // println!("serialized candles: {:?}", serialized.len());
-
-    // let path = std::path::Path::new("./tmp/candles.bson");
-    // let mut file = std::fs::File::create(path).expect("Failed to create file");
-    // let result= file.write(serialized_candles.as_slice());
-    // println!("got file write result: {:?}", result);
+    let path = std::path::Path::new("./tmp/candles.mp");
+    let mut file = std::fs::File::create(path).expect("Failed to create file");
+    let result= file.write(buf.as_slice());
+    println!("got file write result: {:?}", result);
 
 }
 
