@@ -1,9 +1,5 @@
 mod utils;
 
-// generate 1 month of minute candles
-use rand;
-use std::time::{SystemTime, UNIX_EPOCH};
-
 #[derive(Debug)]
 pub struct Candle {
     pub time_begin: u64,
