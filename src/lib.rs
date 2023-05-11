@@ -4,14 +4,15 @@ mod utils;
 use rand;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-struct Candle {
-    time_begin: u64,
-    time_end: u64,
-    open: f64,
-    high: f64,
-    low: f64,
-    close: f64,
-    volume: f64,
+#[derive(Debug)]
+pub struct Candle {
+    pub time_begin: u64,
+    pub time_end: u64,
+    pub open: f64,
+    pub high: f64,
+    pub low: f64,
+    pub close: f64,
+    pub volume: f64,
 }
 
 const MIN_PRICE_SOL: f64 = 0.1;
@@ -37,7 +38,7 @@ const PROB_REVERSAL: f64 = 0.6;
 const CANDLE_SIZE_SECONDS: u64 = 60;
 
 //
-pub fn generate_one_month_minute_candles(){
+pub fn generate_one_month_minute_candles() -> Vec<Candle> {
 
     // params
     let num_candles = MINUTES_PER_DAY * DAYS_PER_MONTH;
@@ -50,13 +51,12 @@ pub fn generate_one_month_minute_candles(){
     let mut is_up = true;
     let mut candles = Vec::new();
 
-    for i in 0..num_candles {
+    for _ in 0..num_candles {
 
         let frac_delta = utils::get_random_in_range(MIN_FRAC_DELTA, MAX_FRAC_DELTA);
         let frac_wick = utils::get_random_in_range(MIN_WICK_FRAC, MAX_WICK_FRAC);
         let delta = last_close * frac_delta;
         let wick = delta * frac_wick;
-
 
         let new_close;
         let high;
@@ -74,7 +74,6 @@ pub fn generate_one_month_minute_candles(){
         if utils::get_random_in_range(0., 1.) < PROB_REVERSAL {
             is_up = !is_up;
         }
-
         if new_close > MAX_PRICE_SOL {
             is_up = false;
         }
@@ -82,7 +81,7 @@ pub fn generate_one_month_minute_candles(){
             is_up = true;
         }
 
-
+        // gen and push new candle
         let new_candle = Candle {
             time_begin: last_time_begin,
             time_end: last_time_begin + CANDLE_SIZE_SECONDS,
@@ -94,14 +93,12 @@ pub fn generate_one_month_minute_candles(){
         };
         candles.push(new_candle);
 
-        // update close
+        // update close and time
         last_time_begin += CANDLE_SIZE_SECONDS;
         last_close = new_close;
     }
 
-
-
-
+    candles
 }
 
 #[cfg(test)]
@@ -110,9 +107,11 @@ mod tests {
 
     #[test]
     fn it_works() {
-        // generate_one_month_minute_candles();
-        let rval = utils::get_random_in_range(1., 10.);
-        println!("got rval: {:?}", rval);
+        let candles = generate_one_month_minute_candles();
+        println!("len candles: {:?}", candles.len());
+        for i in 0..2 {
+            println!("{}: {:?}", i, candles[i]);
+        }
 
         // assert_eq!(result, 4);
     }
