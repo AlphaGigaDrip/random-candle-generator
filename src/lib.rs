@@ -1,7 +1,7 @@
 mod utils;
 #[macro_use]
 extern crate serde_derive;
-use std::io::Write;
+use std::io::{Read, Write};
 use serde::{Serialize, Deserialize};
 use rmp_serde;
 use rmp_serde::Serializer;
@@ -116,6 +116,16 @@ pub fn serialize_and_save() {
 
 }
 
+pub fn load_and_deserialize() {
+    let path = std::path::Path::new("./tmp/candles.mp");
+    let buf = std::fs::read(path).expect("failed to read file");
+    println!("read buf with buf len: {:?}", buf.len());
+
+    let candles: Vec<Candle> = rmp_serde::decode::from_slice(buf.as_slice()).unwrap();
+    println!("deserialized candles vec of len: {:?}", candles.len());
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -127,7 +137,8 @@ mod tests {
         // for i in 0..2 {
         //     println!("{}: {:?}", i, candles[i]);
         // }
-        serialize_and_save();
+        // serialize_and_save();
+        load_and_deserialize();
         println!("something.... yay?");
 
         // assert_eq!(result, 4);
