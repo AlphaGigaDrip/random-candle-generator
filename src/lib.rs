@@ -1,8 +1,8 @@
 mod utils;
 #[macro_use]
 extern crate serde_derive;
-use std::io::{Read, Write};
-use serde::{Serialize, Deserialize};
+use std::io::{Write};
+use serde::{Serialize};
 use rmp_serde;
 use rmp_serde::Serializer;
 
