@@ -20,7 +20,7 @@ pub struct Candle {
     pub volume: f64,
 }
 
-const MIN_PRICE_SOL: f64 = 0.1;
+const MIN_PRICE_SOL: f64 = 10.;
 const MAX_PRICE_SOL: f64 = 100.;
 const START_PRICE_SOL: f64 = 50.;
 
@@ -31,7 +31,7 @@ const MIN_FRAC_DELTA: f64 = 0.0001;
 const MAX_FRAC_DELTA: f64 = 0.1000;
 
 const MIN_WICK_FRAC: f64 = 0.1;
-const MAX_WICK_FRAC: f64 = 0.5;
+const MAX_WICK_FRAC: f64 = 0.2;
 
 const SECOND_PER_MINUTE: usize = 60;
 const MINUTES_PER_DAY: usize = 1440;
@@ -148,15 +148,10 @@ mod tests {
 
     #[test]
     fn it_works() {
-        // let candles = generate_one_month_minute_candles();
-        // println!("len candles: {:?}", candles.len());
-        // for i in 0..2 {
-        //     println!("{}: {:?}", i, candles[i]);
-        // }
-        // serialize_and_save();
-        // load_and_deserialize();
+        let candles = generate_one_month_minute_candles();
+        for (i, c) in candles.iter().enumerate(){
+            println!("{}: {:?}", i, c);
+        }
         println!("something.... yay?");
-
-        // assert_eq!(result, 4);
     }
 }
