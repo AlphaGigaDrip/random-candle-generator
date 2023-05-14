@@ -12,6 +12,7 @@ exclude = [
 serde = "1.0.163"
 rmp-serde = "1.1.1"
 serde_derive = "1.0.163"
+rand = {version = "0.8.5", optional = true}
 
-[dev-dependencies]
-rand = "0.8.5"
+[features]
+use-rand = ["rand"]

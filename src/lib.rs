@@ -1,6 +1,9 @@
+#[cfg(feature = "use-rand")]
 mod utils;
+
 #[macro_use]
 extern crate serde_derive;
+
 use std::io::{Write};
 use serde::{Serialize};
 use rmp_serde;
@@ -40,6 +43,7 @@ const PROB_REVERSAL: f64 = 0.6;
 const CANDLE_SIZE_SECONDS: u64 = 60;
 
 //
+#[cfg(feature = "use-rand")]
 pub fn generate_one_month_minute_candles() -> Vec<Candle> {
 
     // params
@@ -103,6 +107,7 @@ pub fn generate_one_month_minute_candles() -> Vec<Candle> {
     candles
 }
 
+#[cfg(feature = "use-rand")]
 pub fn serialize_and_save() {
     let candles = generate_one_month_minute_candles();
     let mut buf = Vec::new();
@@ -122,6 +127,7 @@ pub fn serialize_candles(candles: Vec<Candle>) -> Vec<u8> {
     buf
 }
 
+#[cfg(feature = "use-rand")]
 pub fn load_and_deserialize() {
     let path = std::path::Path::new("./tmp/candles.mp");
     let buf = std::fs::read(path).expect("failed to read file");
@@ -148,7 +154,7 @@ mod tests {
         //     println!("{}: {:?}", i, candles[i]);
         // }
         // serialize_and_save();
-        load_and_deserialize();
+        // load_and_deserialize();
         println!("something.... yay?");
 
         // assert_eq!(result, 4);
