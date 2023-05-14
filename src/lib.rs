@@ -116,6 +116,12 @@ pub fn serialize_and_save() {
 
 }
 
+pub fn serialize_candles(candles: Vec<Candle>) -> Vec<u8> {
+    let mut buf = Vec::new();
+    candles.serialize(&mut Serializer::new(&mut buf)).unwrap();
+    buf
+}
+
 pub fn load_and_deserialize() {
     let path = std::path::Path::new("./tmp/candles.mp");
     let buf = std::fs::read(path).expect("failed to read file");
@@ -123,7 +129,11 @@ pub fn load_and_deserialize() {
 
     let candles: Vec<Candle> = rmp_serde::decode::from_slice(buf.as_slice()).unwrap();
     println!("deserialized candles vec of len: {:?}", candles.len());
+}
 
+pub fn deserialize_candles(buf: Vec<u8>) -> Vec<Candle> {
+    let candles: Vec<Candle> = rmp_serde::decode::from_slice(buf.as_slice()).unwrap();
+    candles
 }
 
 #[cfg(test)]
